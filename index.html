@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Lotto Flash Pro - CarlosC</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+    <div class="glass-bg"></div>
+    <div class="app-container">
+        
+        <header>
+            <div class="logo-area" onclick="controlMaestro()">
+                <div class="logo-badge">LF</div>
+                <div class="status-indicator">
+                    <div class="live-dot"></div>
+                    <span class="status-text">LIVE</span>
+                </div>
+            </div>
+            
+            <div class="header-center">
+                <h1 class="main-title">LOTTO <span>FLASH</span></h1>
+                <div id="fecha-hoy" class="fecha-badge">Cargando...</div>
+            </div>
+
+            <div id="reloj" class="reloj-digital">00:00:00</div>
+        </header>
+
+        <div class="selector-zona">
+            <select id="view-juego" onchange="render()"></select>
+            <input type="date" id="view-fecha" onchange="render()">
+        </div>
+
+        <div id="listado" class="tabla-premium"></div>
+
+        <div class="social-zone">
+            <button class="btn-like" onclick="sumarLike()">❤️ APOYAR APP</button>
+            <p id="contador-votos" class="votos-count">0 personas apoyan esta innovación</p>
+        </div>
+
+        <div id="panelAdmin" class="modal-maestro">
+            <div class="admin-card">
+                <div class="admin-nav">
+                    <span>ADMINISTRACIÓN CARLOS C</span>
+                    <button onclick="cerrarMaestro()" class="btn-cerrar">×</button>
+                </div>
+                <div class="admin-form">
+                    <label>Sorteo:</label>
+                    <select id="adm-juego">
+                        <option value="lotto-activo">Lotto Activo</option>
+                        <option value="la-granjita">La Granjita</option>
+                    </select>
+                    <label>Hora:</label>
+                    <select id="adm-hora"></select>
+                    <label>Código Animal:</label>
+                    <input type="text" id="adm-num" placeholder="Ej: 09" maxlength="2" oninput="previewAnimal()">
+                    <div id="res-name" class="name-view">---</div>
+                    <button class="btn-lanzar" onclick="ejecutarPublicacion()">🚀 SUBIR RESULTADO</button>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <div class="firma">
+                <p>DISEÑADO Y DESARROLLADO POR</p>
+                <h3>CarlosC</h3>
+                <small>Innovación © 2026</small>
+            </div>
+        </footer>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
