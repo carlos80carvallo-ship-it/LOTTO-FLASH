@@ -6,118 +6,115 @@
     <title>Lotto Flash Pro - CarlosC</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body { font-family: 'Poppins', sans-serif; background-color: #0a0f1d; color: white; }
         .card-gold { 
             background: linear-gradient(145deg, #16213e, #0f172a);
             border-radius: 20px;
             border: 1px solid rgba(255, 215, 0, 0.1);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
         }
-        .btn-gold {
-            background: linear-gradient(to bottom, #f1c40f, #d4ac0d);
-            color: #000;
-            font-weight: bold;
-            transition: all 0.3s;
-        }
-        .btn-gold:hover { transform: scale(1.05); box-shadow: 0 0 15px #f1c40f; }
+        .btn-gold { background: linear-gradient(to bottom, #f1c40f, #d4ac0d); color: #000; font-weight: bold; }
         .circle-result {
-            width: 50px; height: 50px;
+            width: 45px; height: 45px;
             background: linear-gradient(145deg, #f1c40f, #b7950b);
             border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
-            color: black; font-weight: bold; font-size: 1rem;
-            box-shadow: 0 0 10px rgba(241, 196, 15, 0.5);
+            color: black; font-weight: bold; font-size: 1.1rem;
+            box-shadow: 0 0 15px rgba(241, 196, 15, 0.4);
+        }
+        .live-pulse {
+            width: 10px; height: 10px;
+            background-color: #22c55e;
+            border-radius: 50%;
+            display: inline-block;
+            animation: pulse-green 1.5s infinite;
+        }
+        @keyframes pulse-green {
+            0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(34, 197, 94, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+        }
+        .logo-box {
+            background-color: #f1c40f; color: black;
+            padding: 5px 10px; border-radius: 10px; font-weight: bold;
         }
     </style>
 </head>
 <body class="p-4">
 
-    <div class="text-center mb-6">
-        <h1 class="text-4xl font-bold italic text-yellow-500 tracking-wider">LOTTO FLASH ⚡</h1>
-        <p class="text-gray-400 text-sm">Innovación © 2026</p>
-    </div>
+    <header class="mb-6 relative">
+        <div class="flex justify-between items-start">
+            <div class="flex items-center gap-2">
+                <div class="logo-box text-2xl">LF</div>
+                <div>
+                    <h1 class="text-4xl font-bold tracking-tighter italic">LOTTO</h1>
+                    <div class="flex items-center gap-1 text-xs font-bold">
+                        <span class="live-pulse"></span>
+                        <span class="text-green-500 tracking-widest">● LIVE</span>
+                        <span class="text-yellow-500 ml-1 italic font-bold text-2xl">FLASH</span>
+                    </div>
+                </div>
+            </div>
+            <div id="reloj" class="text-yellow-500 font-bold text-xl pt-2">00:00:00</div>
+        </div>
+        <div class="mt-4 text-2xl font-bold text-gray-300" id="fecha-hoy">--/--/----</div>
+    </header>
 
     <main class="max-w-md mx-auto space-y-4">
         
-        <div id="admin-auth" class="card-gold p-4 mb-4 text-center">
+        <div class="flex gap-2 mb-4">
+            <select class="bg-gray-800 p-2 rounded-lg text-sm border border-gray-600 flex-1">
+                <option>Lotto Activo</option>
+                <option>La Granjita</option>
+            </select>
+            <input type="date" id="date-picker" class="bg-gray-800 p-2 rounded-lg text-sm border border-gray-600 flex-1 text-white">
+        </div>
+
+        <div id="admin-auth" class="card-gold p-4 mb-4">
             <input type="password" id="admin-pass" placeholder="Clave de Admin" class="bg-gray-800 border-none text-white p-3 w-full mb-2 rounded-lg text-center">
-            <button id="auth-btn" class="btn-gold w-full py-3 rounded-lg uppercase">ACCEDER AL SISTEMA</button>
+            <button id="auth-btn" class="btn-gold w-full py-3 rounded-lg uppercase">ACCEDER</button>
         </div>
 
         <div id="admin-panel" class="hidden card-gold p-6 border-2 border-yellow-500 mb-6">
             <h2 class="text-yellow-500 font-bold mb-4 text-center">PUBLICAR RESULTADO</h2>
-            <form id="result-form" class="space-y-4">
-                <select id="lottery-select" class="w-full p-3 bg-gray-800 rounded-lg">
-                    <option value="lotto">Lotto Activo</option>
-                    <option value="granjita">La Granjita</option>
+            <form id="result-form" class="space-y-4 text-black">
+                <select id="lottery-select" class="w-full p-3 rounded-lg"><option value="lotto">Lotto Activo</option><option value="granjita">La Granjita</option></select>
+                <select id="time-select" class="w-full p-3 rounded-lg">
+                    <option value="08">08:00 AM</option><option value="09">09:00 AM</option><option value="10">10:00 AM</option>
+                    <option value="11">11:00 AM</option><option value="12">12:00 PM</option><option value="01">01:00 PM</option>
+                    <option value="04">04:00 PM</option><option value="07">07:00 PM</option>
                 </select>
-                <select id="time-select" class="w-full p-3 bg-gray-800 rounded-lg">
-                    <option value="08">08:00 AM</option><option value="09">09:00 AM</option>
-                    <option value="10">10:00 AM</option><option value="11">11:00 AM</option>
-                    <option value="12">12:00 PM</option><option value="01">01:00 PM</option>
-                    <option value="02">02:00 PM</option><option value="03">03:00 PM</option>
-                    <option value="04">04:00 PM</option><option value="05">05:00 PM</option>
-                    <option value="06">06:00 PM</option><option value="07">07:00 PM</option>
-                </select>
-                <input type="text" id="result-input" placeholder="Animalito o Nº" class="w-full p-3 bg-gray-700 rounded-lg text-center text-xl font-bold uppercase">
-                <button type="submit" class="bg-green-500 text-black w-full py-4 rounded-xl font-bold hover:bg-green-400">SUBIR AHORA</button>
+                <input type="text" id="result-input" placeholder="Animalito o Nº" class="w-full p-3 rounded-lg text-center text-xl font-bold uppercase">
+                <button type="submit" class="bg-green-500 text-black w-full py-4 rounded-xl font-bold">SUBIR AHORA</button>
             </form>
-            <p id="status-msg" class="text-center mt-2 text-yellow-400 font-bold"></p>
         </div>
 
-        <div id="lista-resultados" class="space-y-3">
-            </div>
+        <div id="lista-resultados" class="space-y-3"></div>
 
         <div class="mt-8 text-center space-y-4 pb-10">
-            <button class="btn-gold px-8 py-3 rounded-full shadow-lg w-full mb-2">❤️ ME GUSTA LA APP</button>
-            
-            <button onclick="compartirApp()" class="bg-blue-600 hover:bg-blue-500 text-white px-8 py-3 rounded-full shadow-lg w-full flex items-center justify-center gap-2 font-bold uppercase">
-                <span>📤 COMPARTIR APP</span>
+            <button onclick="compartirApp()" class="btn-gold px-8 py-3 rounded-full shadow-lg w-full flex items-center justify-center gap-2 font-bold uppercase">
+                <i class="fas fa-share-alt"></i> COMPARTIR APP
             </button>
-
-            <p class="text-sm text-gray-400">1242 personas apoyan esta innovación</p>
-            <div class="pt-6 border-t border-gray-800">
-                <p class="text-xs text-gray-500">DISEÑADO Y DESARROLLADO POR</p>
+            <div class="pt-6">
+                <p class="text-xs text-gray-500 uppercase">Diseñado y Desarrollado por</p>
                 <h2 class="text-2xl font-bold text-white uppercase tracking-widest">CarlosC</h2>
+                <p class="text-[10px] text-gray-600 mt-2">Innovación © 2026</p>
             </div>
         </div>
     </main>
 
     <script>
-        // Generar las filas de resultados automáticamente para ahorrar código
-        const horas = ["08:00 AM", "09:00 AM", "10:00 AM", "11:00 AM", "12:00 PM", "01:00 PM", "02:00 PM", "03:00 PM", "04:00 PM", "05:00 PM", "06:00 PM", "07:00 PM"];
-        const lista = document.getElementById('lista-resultados');
-        
-        horas.forEach(h => {
-            const idH = h.split(':')[0];
-            lista.innerHTML += `
-                <div class="card-gold p-4 flex justify-between items-center">
-                    <div><p class="text-[10px] text-gray-500 uppercase">Horario</p><h3 class="text-lg font-bold">${h}</h3></div>
-                    <div class="flex gap-3">
-                        <div class="text-center"><p class="text-[9px] text-yellow-500 mb-1 tracking-tighter">LOTTO</p><div id="res-lotto-${idH}" class="circle-result">--</div></div>
-                        <div class="text-center"><p class="text-[9px] text-yellow-500 mb-1 tracking-tighter">GRANJA</p><div id="res-granjita-${idH}" class="circle-result">--</div></div>
-                    </div>
-                </div>`;
-        });
-
-        // Función para compartir
-        function compartirApp() {
-            if (navigator.share) {
-                navigator.share({
-                    title: 'Lotto Flash ⚡',
-                    text: 'Mira los resultados en tiempo real aquí:',
-                    url: window.location.href
-                });
-            } else {
-                alert("Copia este link para compartir: " + window.location.href);
-            }
+        // Reloj y Fecha
+        function actualizarReloj() {
+            const ahora = new Date();
+            document.getElementById('reloj').innerText = ahora.toLocaleTimeString();
+            document.getElementById('fecha-hoy').innerText = ahora.toLocaleDateString();
+            document.getElementById('date-picker').valueAsDate = ahora;
         }
-    </script>
+        setInterval(actualizarReloj, 1000);
+        actualizarReloj();
 
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
-    <script src="script.js"></script>
-</body>
-</html>
+        // Generar Filas
+        const horas = ["08:00 AM", "09:00 AM", "10:00 AM", "11:00 AM", "1
+                       
