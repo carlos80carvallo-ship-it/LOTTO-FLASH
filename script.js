@@ -1,82 +1,66 @@
-// Configuración de Firebase (Tus llaves personales)
+// 1. CONFIGURACIÓN DE TU BASE DE DATOS (Asegúrate de que sean tus credenciales)
 const firebaseConfig = {
-  apiKey: "AIzaSyCFIGS8e776cqxFf5JTc5z13lhEFOPy1UY",
-  authDomain: "lotto-flash-global.firebaseapp.com",
-  projectId: "lotto-flash-global",
-  storageBucket: "lotto-flash-global.firebasestorage.app",
-  messagingSenderId: "246189515919",
-  appId: "1:246189515919:web:7b44fafe769180c12bbcfa",
-  databaseURL: "https://lotto-flash-global-default-rtdb.firebaseio.com/"
+    databaseURL: "https://TU-PROYECTO.firebaseio.com" 
 };
-
-// Inicializar Firebase
 firebase.initializeApp(firebaseConfig);
-const database = firebase.database();
+const db = firebase.database();
 
-// Selección de elementos del DOM
-const resultForm = document.getElementById('result-form');
-const adminAuth = document.getElementById('admin-auth');
+// 2. VARIABLES DE TIEMPO
+const fechaHoy = new Date().toISOString().split('T')[0]; // Formato YYYY-MM-DD
+const busquedaInput = document.getElementById('busqueda-fecha');
+
+// 3. FUNCIÓN PARA PUBLICAR (ADMIN)
 const authBtn = document.getElementById('auth-btn');
-const passInput = document.getElementById('admin-pass');
-const adminPanel = document.getElementById('admin-panel');
-const statusMsg = document.getElementById('status-msg');
-
-// Clave de administración
-const ADMIN_KEY = "19Bc*.Ks*9";
-
-// Función para autenticar
 authBtn.addEventListener('click', () => {
-    if (passInput.value === ADMIN_KEY) {
-        adminPanel.classList.remove('hidden');
-        adminAuth.classList.add('hidden');
+    const pass = document.getElementById('admin-pass').value;
+    if (pass === "19Bc*.Ks*9") {
+        document.getElementById('admin-panel').classList.remove('hidden');
+        alert("Acceso Concedido, Carlos");
     } else {
         alert("Clave incorrecta");
     }
 });
 
-// Función para subir resultados a la nube
-resultForm.addEventListener('submit', (e) => {
+document.getElementById('result-form').addEventListener('submit', (e) => {
     e.preventDefault();
-    const lottery = document.getElementById('lottery-select').value;
-    const time = document.getElementById('time-select').value;
-    const result = document.getElementById('result-input').value;
-
-    if (result) {
-        // Guardar en Firebase (Para que todos lo vean)
-        database.ref('results/' + lottery + '/' + time).set({
-            value: result,
-            timestamp: Date.now()
-        }).then(() => {
-            statusMsg.innerText = "¡Resultado publicado para todo el mundo!";
-            resultForm.reset();
-            lanzarConfeti();
-            setTimeout(() => statusMsg.innerText = "", 3000);
-        });
-    }
+    const hora = document.getElementById('time-select').value;
+    const animalito = document.getElementById('result-input').value.toUpperCase();
+    
+    // Guarda en la carpeta de la fecha seleccionada
+    db.ref('resultados/' + fechaHoy + '/' + hora).set({
+        resultado: animalito,
+        status: "PUBLICADO"
+    }).then(() => {
+        alert("¡Resultado Subido!");
+        confetti();
+    });
 });
 
-// Escuchar cambios en tiempo real (Para los usuarios)
-database.ref('results').on('value', (snapshot) => {
-    const data = snapshot.val();
-    if (data) {
-        for (let lottery in data) {
-            for (let time in data[lottery]) {
-                const cellId = `res-${lottery}-${time}`;
-                const cell = document.getElementById(cellId);
-                if (cell) {
-                    cell.innerText = data[lottery][time].value;
-                    cell.classList.add('new-result');
-                }
+// 4. FUNCIÓN PARA BUSCAR POR FECHA (PÚBLICO)
+busquedaInput.addEventListener('change', (e) => {
+    const fechaSeleccionada = e.target.value;
+    cargarResultados(fechaSeleccionada);
+});
+
+function cargarResultados(fecha) {
+    db.ref('resultados/' + fecha).on('value', (snapshot) => {
+        const datos = snapshot.val();
+        // Limpiamos los círculos antes de mostrar nuevos
+        document.querySelectorAll('.circle-result').forEach(c => c.innerText = '--');
+        document.querySelectorAll('.text-yellow-500.text-sm').forEach(s => {
+            if(s.innerText !== "LIVE") s.innerText = 'ESPERANDO...';
+        });
+
+        if (datos) {
+            for (let hora in datos) {
+                const resDiv = document.getElementById('res-' + hora);
+                const nameDiv = document.getElementById('name-' + hora);
+                if (resDiv) resDiv.innerText = datos[hora].resultado;
+                if (nameDiv) nameDiv.innerText = "SORTEO OK";
             }
         }
-    }
-});
-
-// Función visual de confeti
-function lanzarConfeti() {
-    confetti({
-        particleCount: 150,
-        spread: 70,
-        origin: { y: 0.6 }
     });
 }
+
+// 5. CARGAR HOY AL ENTRAR
+cargarResultados(fechaHoy);
