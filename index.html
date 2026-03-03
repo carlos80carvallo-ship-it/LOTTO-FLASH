@@ -2,75 +2,75 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Lotto Flash Pro - CarlosC</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LOTTO FLASH - Resultados Globales</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .new-result { animation: pulse 2s infinite; color: #ef4444; font-weight: bold; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+    </style>
 </head>
-<body>
-    <div class="glass-bg"></div>
-    <div class="app-container">
-        
-        <header>
-            <div class="logo-area" onclick="controlMaestro()">
-                <div class="logo-badge">LF</div>
-                <div class="status-indicator">
-                    <div class="live-dot"></div>
-                    <span class="status-text">LIVE</span>
-                </div>
-            </div>
-            
-            <div class="header-center">
-                <h1 class="main-title">LOTTO <span>FLASH</span></h1>
-                <div id="fecha-hoy" class="fecha-badge">Cargando...</div>
-            </div>
+<body class="bg-gray-100 min-h-screen">
 
-            <div id="reloj" class="reloj-digital">00:00:00</div>
-        </header>
+    <header class="bg-yellow-500 text-white p-4 text-center shadow-lg">
+        <h1 class="text-3xl font-bold italic">LOTTO FLASH ⚡</h1>
+        <p class="text-sm">Resultados en Tiempo Real</p>
+    </header>
 
-        <div class="selector-zona">
-            <select id="view-juego" onchange="render()"></select>
-            <input type="date" id="view-fecha" onchange="render()">
+    <main class="p-4 max-w-md mx-auto">
+        <div id="admin-auth" class="mb-6 bg-white p-4 rounded-lg shadow">
+            <input type="password" id="admin-pass" placeholder="Clave de Admin" class="border p-2 w-full mb-2 rounded">
+            <button id="auth-btn" class="bg-blue-600 text-white w-full py-2 rounded font-bold">ENTRAR AL PANEL</button>
         </div>
 
-        <div id="listado" class="tabla-premium"></div>
-
-        <div class="social-zone">
-            <button class="btn-like" onclick="sumarLike()">❤️ APOYAR APP</button>
-            <p id="contador-votos" class="votos-count">0 personas apoyan esta innovación</p>
+        <div id="admin-panel" class="hidden mb-6 bg-blue-50 p-4 rounded-lg border-2 border-blue-200 shadow">
+            <h2 class="text-center font-bold mb-4 text-blue-800">PUBLICAR RESULTADO</h2>
+            <form id="result-form" class="space-y-3">
+                <select id="lottery-select" class="w-full p-2 border rounded">
+                    <option value="lotto">Lotto Activo</option>
+                    <option value="granjita">La Granjita</option>
+                </select>
+                <select id="time-select" class="w-full p-2 border rounded">
+                    <option value="09">09:00 AM</option>
+                    <option value="10">10:00 AM</option>
+                    <option value="11">11:00 AM</option>
+                    <option value="12">12:00 PM</option>
+                    <option value="01">01:00 PM</option>
+                    <option value="04">04:00 PM</option>
+                    <option value="07">07:00 PM</option>
+                </select>
+                <input type="text" id="result-input" placeholder="Animalito o Número" class="w-full p-2 border rounded text-center text-xl uppercase">
+                <button type="submit" class="bg-green-600 text-white w-full py-3 rounded-lg font-bold shadow-md">SUBIR RESULTADO</button>
+            </form>
+            <p id="status-msg" class="text-center mt-2 text-green-600 font-bold"></p>
         </div>
 
-        <div id="panelAdmin" class="modal-maestro">
-            <div class="admin-card">
-                <div class="admin-nav">
-                    <span>ADMINISTRACIÓN CARLOS C</span>
-                    <button onclick="cerrarMaestro()" class="btn-cerrar">×</button>
-                </div>
-                <div class="admin-form">
-                    <label>Sorteo:</label>
-                    <select id="adm-juego">
-                        <option value="lotto-activo">Lotto Activo</option>
-                        <option value="la-granjita">La Granjita</option>
-                    </select>
-                    <label>Hora:</label>
-                    <select id="adm-hora"></select>
-                    <label>Código Animal:</label>
-                    <input type="text" id="adm-num" placeholder="Ej: 09" maxlength="2" oninput="previewAnimal()">
-                    <div id="res-name" class="name-view">---</div>
-                    <button class="btn-lanzar" onclick="ejecutarPublicacion()">🚀 SUBIR RESULTADO</button>
-                </div>
-            </div>
+        <div class="bg-white rounded-lg shadow-xl overflow-hidden">
+            <table class="w-full text-center border-collapse">
+                <thead>
+                    <tr class="bg-gray-800 text-white">
+                        <th class="p-3 border">HORA</th>
+                        <th class="p-3 border">LOTTO ACT.</th>
+                        <th class="p-3 border">GRANJITA</th>
+                    </tr>
+                </thead>
+                <tbody id="results-table">
+                    <tr class="border-b"> <td class="p-3 font-bold bg-gray-50">09 AM</td> <td id="res-lotto-09" class="p-3">-</td> <td id="res-granjita-09" class="p-3">-</td> </tr>
+                    <tr class="border-b"> <td class="p-3 font-bold bg-gray-50">10 AM</td> <td id="res-lotto-10" class="p-3">-</td> <td id="res-granjita-10" class="p-3">-</td> </tr>
+                    <tr class="border-b"> <td class="p-3 font-bold bg-gray-50">11 AM</td> <td id="res-lotto-11" class="p-3">-</td> <td id="res-granjita-11" class="p-3">-</td> </tr>
+                    <tr class="border-b"> <td class="p-3 font-bold bg-gray-50">12 PM</td> <td id="res-lotto-12" class="p-3">-</td> <td id="res-granjita-12" class="p-3">-</td> </tr>
+                    <tr class="border-b"> <td class="p-3 font-bold bg-gray-50">01 PM</td> <td id="res-lotto-01" class="p-3">-</td> <td id="res-granjita-01" class="p-3">-</td> </tr>
+                    <tr class="border-b"> <td class="p-3 font-bold bg-gray-50">04 PM</td> <td id="res-lotto-04" class="p-3">-</td> <td id="res-granjita-04" class="p-3">-</td> </tr>
+                    <tr class="border-b"> <td class="p-3 font-bold bg-gray-50">07 PM</td> <td id="res-lotto-07" class="p-3">-</td> <td id="res-granjita-07" class="p-3">-</td> </tr>
+                </tbody>
+            </table>
         </div>
+    </main>
 
-        <footer>
-            <div class="firma">
-                <p>DISEÑADO Y DESARROLLADO POR</p>
-                <h3>CarlosC</h3>
-                <small>Innovación © 2026</small>
-            </div>
-        </footer>
-    </div>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    
     <script src="script.js"></script>
 </body>
 </html>
