@@ -3,59 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lotto Flash Pro - CarlosC</title>
+    <title>Lotto Flash - CarlosC</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { font-family: 'Poppins', sans-serif; background-color: #0a0f1d; color: white; padding: 15px; }
-        .card-gold { background: linear-gradient(145deg, #16213e, #0f172a); border-radius: 20px; border: 1px solid rgba(255, 215, 0, 0.1); margin-bottom: 12px; padding: 15px; }
-        .circle-result { width: 45px; height: 45px; background: linear-gradient(145deg, #f1c40f, #b7950b); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: black; font-weight: bold; font-size: 1.1rem; box-shadow: 0 0 15px rgba(241, 196, 15, 0.4); }
-        .live-pulse { width: 10px; height: 10px; background-color: #22c55e; border-radius: 50%; display: inline-block; animation: pulse-green 1.5s infinite; }
-        @keyframes pulse-green { 0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(34, 197, 94, 0); } 100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); } }
-        .logo-box { background-color: #f1c40f; color: black; padding: 5px 12px; border-radius: 10px; font-weight: bold; font-size: 1.5rem; }
+        body { background-color: #0a0f1d; color: white; padding: 15px; font-family: sans-serif; }
+        .card-gold { background: #16213e; border-radius: 15px; border: 1px solid #2d3748; margin-bottom: 10px; padding: 15px; }
+        .circle-result { width: 45px; height: 45px; background: #f1c40f; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: black; font-weight: bold; }
+        .live-dot { width: 10px; height: 10px; background: #22c55e; border-radius: 50%; display: inline-block; margin-right: 5px; box-shadow: 0 0 8px #22c55e; }
+        .logo-box { background: #f1c40f; color: black; padding: 5px 10px; border-radius: 8px; font-weight: bold; font-size: 1.2rem; }
     </style>
 </head>
 <body>
 
-    <header class="flex justify-between items-center mb-2">
-        <div class="flex items-center gap-3">
+    <div class="flex justify-between items-center mb-4">
+        <div class="flex items-center gap-2">
             <div class="logo-box">LF</div>
             <div>
-                <h1 class="text-3xl font-bold italic leading-none">LOTTO</h1>
-                <div class="flex items-center gap-1">
-                    <span class="live-pulse"></span>
-                    <span class="text-green-500 text-xs font-bold tracking-widest uppercase">Live</span>
-                    <span class="text-yellow-500 text-xl font-bold italic ml-1">FLASH</span>
-                </div>
+                <h1 class="text-2xl font-bold italic">LOTTO <span class="text-yellow-500">FLASH</span></h1>
+                <div class="text-xs font-bold text-green-500 flex items-center"><span class="live-dot"></span> LIVE</div>
             </div>
         </div>
-        <div id="reloj" class="text-yellow-500 font-bold text-xl">--:--:--</div>
-    </header>
-
-    <p id="fecha-hoy" class="text-2xl font-bold text-gray-400 mb-6">--/--/----</p>
-
-    <div class="card-gold text-center">
-        <input type="password" id="admin-pass" placeholder="Clave de Admin" class="bg-gray-800 text-white p-3 w-full mb-2 rounded-lg text-center border-none">
-        <button id="auth-btn" class="bg-yellow-500 text-black w-full py-3 rounded-lg font-bold uppercase">ACCEDER AL SISTEMA</button>
+        <div id="reloj" class="text-yellow-500 font-bold text-lg">Cargando...</div>
     </div>
 
-    <div class="mt-6 space-y-3">
+    <div id="fecha-hoy" class="text-xl font-bold text-gray-400 mb-6 uppercase">--/--/----</div>
+
+    <div class="card-gold text-center mb-6">
+        <input type="password" id="admin-pass" placeholder="Clave Admin" class="bg-gray-800 text-white p-2 w-full mb-2 rounded text-center border-none">
+        <button id="auth-btn" class="bg-yellow-500 text-black w-full py-2 rounded font-bold uppercase">ENTRAR AL SISTEMA</button>
+    </div>
+
+    <div class="space-y-2">
         <div class="card-gold flex justify-between items-center">
-            <div><p class="text-[10px] text-gray-500">HORARIO</p><h3 class="text-lg font-bold">08:00 AM</h3></div>
+            <div class="text-sm font-bold text-gray-400">08:00 AM</div>
             <div class="flex items-center gap-3">
-                <span class="text-yellow-500 font-bold text-sm" id="name-08">ESPERANDO...</span>
+                <span class="text-yellow-500 font-bold text-xs" id="name-08">ESPERANDO...</span>
                 <div id="res-08" class="circle-result">--</div>
-                <i class="fab fa-whatsapp text-green-500 text-xl"></i>
+                <i class="fab fa-whatsapp text-green-500"></i>
             </div>
         </div>
         <div class="card-gold flex justify-between items-center">
-            <div><p class="text-[10px] text-gray-500">HORARIO</p><h3 class="text-lg font-bold">09:00 AM</h3></div>
+            <div class="text-sm font-bold text-gray-400">09:00 AM</div>
             <div class="flex items-center gap-3">
-                <span class="text-yellow-500 font-bold text-sm" id="name-09">ESPERANDO...</span>
+                <span class="text-yellow-500 font-bold text-xs" id="name-09">ESPERANDO...</span>
                 <div id="res-09" class="circle-result">--</div>
-                <i class="fab fa-whatsapp text-green-500 text-xl"></i>
+                <i class="fab fa-whatsapp text-green-500"></i>
             </div>
         </div>
-        <div class="card-gold flex justify-between
-            
+        <div class="card-gold flex justify-between items-center">
+            <div class="text-sm font-bold text-gray-400">10:00 AM</div>
+            <div class="flex items-center gap-3">
+                <span class="text-yellow-500 font-bold text-xs" id="name-10">ESPERANDO...</span>
+                <div id="res-10" class="circle-result">--</div>
+                <i class="fab fa-whatsapp text-green-500"></i>
+            </div>
+        </div>
+        <div class="card-gold flex justify-between items-center">
+            <div class="text-sm font-bold text-gray-400">11:00 AM</div>
+            <div class="flex items-center gap-3">
+                <span class="text-yellow-500 font-bold text-xs" id="name-11">ESPERANDO...</span>
+                <div id="res-11" class="circle-result">--</div>
+                <i class="fab fa-whatsapp text-green-500"></i>
+            </div>
+        </div>
+        <div class="card-gold flex justify-between items-center">
+            <div class="text-sm font-bold text-gray-400">12:00 PM</div>
+            <div class="flex items-center gap-3">
+                <span class="text-yellow-500 font-bold text-xs" id="name-12">ESPERANDO...</span>
+                <div id="res-12" class="circle-result">--</div>
+                <i class="fab fa-whatsapp text-green-500"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-8 text-center pb-10">
+        <button class="bg-yellow-600 text-white w-full py-3 rounded-full font-bold mb-4 italic">COMPARTIR APP</button>
+        <p class="text-[10px] text-gray-500">DESARROLLO POR</p>
+        <h2 class="text-xl font-bold">CarlosC</h2>
+    </div>
+
+    <script>
+        function update() {
+            const d = new Date();
+            document.getElementById('reloj').innerText = d.toLocaleTimeString();
+            document.getElementById('fecha-hoy').innerText = d.toLocaleDateString();
+        }
+        setInterval(update, 1000); update();
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
