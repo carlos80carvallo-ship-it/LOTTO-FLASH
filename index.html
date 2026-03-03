@@ -3,34 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LOTTO FLASH - Resultados Globales</title>
+    <title>Lotto Flash Pro - CarlosC</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        .new-result { animation: pulse 2s infinite; color: #ef4444; font-weight: bold; }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+        body { font-family: 'Poppins', sans-serif; background-color: #0a0f1d; color: white; }
+        .card-gold { 
+            background: linear-gradient(145deg, #16213e, #0f172a);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 215, 0, 0.1);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        }
+        .btn-gold {
+            background: linear-gradient(to bottom, #f1c40f, #d4ac0d);
+            color: #000;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .btn-gold:hover { transform: scale(1.05); box-shadow: 0 0 15px #f1c40f; }
+        .circle-result {
+            width: 50px; height: 50px;
+            background: linear-gradient(145deg, #f1c40f, #b7950b);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: black; font-weight: bold; font-size: 1.2rem;
+            box-shadow: 0 0 10px rgba(241, 196, 15, 0.5);
+        }
     </style>
 </head>
-<body class="bg-gray-100 min-h-screen">
+<body class="p-4">
 
-    <header class="bg-yellow-500 text-white p-4 text-center shadow-lg">
-        <h1 class="text-3xl font-bold italic">LOTTO FLASH ⚡</h1>
-        <p class="text-sm">Resultados en Tiempo Real</p>
-    </header>
+    <div class="text-center mb-8">
+        <h1 class="text-4xl font-bold italic text-yellow-500 tracking-wider">LOTTO FLASH ⚡</h1>
+        <p class="text-gray-400 text-sm">Innovación © 2026</p>
+    </div>
 
-    <main class="p-4 max-w-md mx-auto">
-        <div id="admin-auth" class="mb-6 bg-white p-4 rounded-lg shadow">
-            <input type="password" id="admin-pass" placeholder="Clave de Admin" class="border p-2 w-full mb-2 rounded">
-            <button id="auth-btn" class="bg-blue-600 text-white w-full py-2 rounded font-bold">ENTRAR AL PANEL</button>
+    <main class="max-w-md mx-auto space-y-4">
+        
+        <div id="admin-auth" class="card-gold p-4 mb-4">
+            <input type="password" id="admin-pass" placeholder="Clave de Admin" class="bg-gray-800 border-none text-white p-3 w-full mb-2 rounded-lg">
+            <button id="auth-btn" class="btn-gold w-full py-3 rounded-lg uppercase">Acceder al Sistema</button>
         </div>
 
-        <div id="admin-panel" class="hidden mb-6 bg-blue-50 p-4 rounded-lg border-2 border-blue-200 shadow">
-            <h2 class="text-center font-bold mb-4 text-blue-800">PUBLICAR RESULTADO</h2>
-            <form id="result-form" class="space-y-3">
-                <select id="lottery-select" class="w-full p-2 border rounded">
+        <div id="admin-panel" class="hidden card-gold p-6 border-2 border-yellow-500">
+            <h2 class="text-yellow-500 font-bold mb-4 text-center">PUBLICAR RESULTADO PRO</h2>
+            <form id="result-form" class="space-y-4">
+                <select id="lottery-select" class="w-full p-3 bg-gray-800 rounded-lg">
                     <option value="lotto">Lotto Activo</option>
                     <option value="granjita">La Granjita</option>
                 </select>
-                <select id="time-select" class="w-full p-2 border rounded">
+                <select id="time-select" class="w-full p-3 bg-gray-800 rounded-lg">
                     <option value="09">09:00 AM</option>
                     <option value="10">10:00 AM</option>
                     <option value="11">11:00 AM</option>
@@ -39,38 +61,68 @@
                     <option value="04">04:00 PM</option>
                     <option value="07">07:00 PM</option>
                 </select>
-                <input type="text" id="result-input" placeholder="Animalito o Número" class="w-full p-2 border rounded text-center text-xl uppercase">
-                <button type="submit" class="bg-green-600 text-white w-full py-3 rounded-lg font-bold shadow-md">SUBIR RESULTADO</button>
+                <input type="text" id="result-input" placeholder="Animalito o Nº" class="w-full p-4 bg-gray-700 rounded-lg text-center text-2xl font-bold uppercase">
+                <button type="submit" class="bg-green-500 text-black w-full py-4 rounded-xl font-bold text-lg hover:bg-green-400">ENVIAR A LA NUBE</button>
             </form>
-            <p id="status-msg" class="text-center mt-2 text-green-600 font-bold"></p>
+            <p id="status-msg" class="text-center mt-2 text-yellow-400 font-bold"></p>
         </div>
 
-        <div class="bg-white rounded-lg shadow-xl overflow-hidden">
-            <table class="w-full text-center border-collapse">
-                <thead>
-                    <tr class="bg-gray-800 text-white">
-                        <th class="p-3 border">HORA</th>
-                        <th class="p-3 border">LOTTO ACT.</th>
-                        <th class="p-3 border">GRANJITA</th>
-                    </tr>
-                </thead>
-                <tbody id="results-table">
-                    <tr class="border-b"> <td class="p-3 font-bold bg-gray-50">09 AM</td> <td id="res-lotto-09" class="p-3">-</td> <td id="res-granjita-09" class="p-3">-</td> </tr>
-                    <tr class="border-b"> <td class="p-3 font-bold bg-gray-50">10 AM</td> <td id="res-lotto-10" class="p-3">-</td> <td id="res-granjita-10" class="p-3">-</td> </tr>
-                    <tr class="border-b"> <td class="p-3 font-bold bg-gray-50">11 AM</td> <td id="res-lotto-11" class="p-3">-</td> <td id="res-granjita-11" class="p-3">-</td> </tr>
-                    <tr class="border-b"> <td class="p-3 font-bold bg-gray-50">12 PM</td> <td id="res-lotto-12" class="p-3">-</td> <td id="res-granjita-12" class="p-3">-</td> </tr>
-                    <tr class="border-b"> <td class="p-3 font-bold bg-gray-50">01 PM</td> <td id="res-lotto-01" class="p-3">-</td> <td id="res-granjita-01" class="p-3">-</td> </tr>
-                    <tr class="border-b"> <td class="p-3 font-bold bg-gray-50">04 PM</td> <td id="res-lotto-04" class="p-3">-</td> <td id="res-granjita-04" class="p-3">-</td> </tr>
-                    <tr class="border-b"> <td class="p-3 font-bold bg-gray-50">07 PM</td> <td id="res-lotto-07" class="p-3">-</td> <td id="res-granjita-07" class="p-3">-</td> </tr>
-                </tbody>
-            </table>
+        <div class="space-y-3">
+            <div class="card-gold p-5 flex justify-between items-center">
+                <div>
+                    <p class="text-xs text-gray-500 uppercase tracking-widest">Horario</p>
+                    <h3 class="text-xl font-bold">09:00 AM</h3>
+                </div>
+                <div class="flex gap-4">
+                    <div class="text-center">
+                        <p class="text-[10px] text-yellow-500">LOTTO</p>
+                        <div id="res-lotto-09" class="circle-result">--</div>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-[10px] text-yellow-500">GRANJA</p>
+                        <div id="res-granjita-09" class="circle-result">--</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-gold p-5 flex justify-between items-center">
+                <div><p class="text-xs text-gray-500 uppercase">Horario</p><h3 class="text-xl font-bold">12:00 PM</h3></div>
+                <div class="flex gap-4">
+                    <div class="text-center"><div id="res-lotto-12" class="circle-result">--</div></div>
+                    <div class="text-center"><div id="res-granjita-12" class="circle-result">--</div></div>
+                </div>
+            </div>
+
+            <div class="card-gold p-5 flex justify-between items-center">
+                <div><p class="text-xs text-gray-500 uppercase">Horario</p><h3 class="text-xl font-bold">04:00 PM</h3></div>
+                <div class="flex gap-4">
+                    <div class="text-center"><div id="res-lotto-04" class="circle-result">--</div></div>
+                    <div class="text-center"><div id="res-granjita-04" class="circle-result">--</div></div>
+                </div>
+            </div>
+            
+            <div class="card-gold p-5 flex justify-between items-center">
+                <div><p class="text-xs text-gray-500 uppercase">Horario</p><h3 class="text-xl font-bold">07:00 PM</h3></div>
+                <div class="flex gap-4">
+                    <div class="text-center"><div id="res-lotto-07" class="circle-result">--</div></div>
+                    <div class="text-center"><div id="res-granjita-07" class="circle-result">--</div></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-10 text-center space-y-4 pb-10">
+            <button class="btn-gold px-8 py-3 rounded-full shadow-lg">❤️ ME GUSTA LA APP</button>
+            <p class="text-sm text-gray-400">1242 personas apoyan esta innovación</p>
+            <div class="pt-4">
+                <p class="text-xs text-gray-500">DISEÑADO Y DESARROLLADO POR</p>
+                <h2 class="text-2xl font-bold text-white">CarlosC</h2>
+            </div>
         </div>
     </main>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
-    
     <script src="script.js"></script>
 </body>
 </html>
